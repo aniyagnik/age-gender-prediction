@@ -6,6 +6,7 @@ from PIL import Image
 import io
 import json
 import os
+from fastapi.middleware.cors import CORSMiddleware
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Disable GPU, use CPU only
 
@@ -14,6 +15,14 @@ tf.config.set_visible_devices([], 'GPU')  # Explicitly disable GPU usage
 # Initialize FastAPI app
 app = FastAPI()
 
+# Enable CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins (for testing)
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
+)
 # Load model architecture from JSON
 with open("age_gender_model/config.json", "r") as f:
     model_config = json.load(f)
